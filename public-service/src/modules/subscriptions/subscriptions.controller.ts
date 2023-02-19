@@ -18,18 +18,15 @@ export class SubscriptionsController {
   }
 
   @Post()
-  @ApiCreatedResponse({ status: HttpStatus.CREATED })
+  @ApiCreatedResponse({  status: HttpStatus.CREATED })
   create(@Body() createSubscriptionDto: CreateSubscriptionDto): Promise<Subscription> {
     return this.subscriptionsService.create(createSubscriptionDto);
   }
 
   @Get()
   findAll(@Query() pagination: PaginationDTO): Promise<Pagination<Subscription>> {
-    return this.subscriptionsService.findAll(pagination, {
-      page: pagination.page,
-      limit: pagination.limit,
-      route: `${this.baseUrl}/subscriptions`
-    });
+    const { page, limit } = pagination;
+    return this.subscriptionsService.findAll({ page, limit, route: `${this.baseUrl}/subscriptions` });
   }
 
   @Get(':id')

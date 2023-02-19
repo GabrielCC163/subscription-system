@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsBoolean, IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-
+import { IsBoolean, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { GenderEnum } from '../enum';
 export class CreateSubscriptionDto {
   @ApiProperty({ example: 'elon@email.com' })
   @IsNotEmpty()
@@ -12,10 +12,10 @@ export class CreateSubscriptionDto {
   @IsString()
   firstName?: string;
 
-  @ApiPropertyOptional({ example: 'masc' })
+  @ApiPropertyOptional({ enum: GenderEnum, enumName: 'GenderEnum' })
   @IsOptional()
-  @IsString()
-  gender?: string;
+  @IsEnum(GenderEnum)
+  gender?: GenderEnum;
 
   @ApiProperty({ example: '1997-01-01' })
   @IsNotEmpty()
