@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: ./subscription-service
+      dockerfile: Dockerfile
+    environment:
+      DB_USER: user
+      DB_PASSWORD: subscription
+      DB_NAME: subscription
+      DB_HOST: db
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./subscription-service:/app
+    depends_on:
+      - db
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: subscription
+      POSTGRES_DB: subscription
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/data/postgres
+    restart: unless-stopped
+
+volumes:
+  db-data:

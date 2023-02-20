@@ -6,8 +6,8 @@ import { ConfigService } from '@nestjs/config';
 import { AppConfig } from '@config/app.config';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { PaginationDTO } from 'src/common/dto/pagination.dto';
-import { Subscription } from './interfaces';
-import { SubscriptionResponseDto } from './dto/subscription-response.dto';
+import { SubscriptionPaginatedResponseDto, SubscriptionResponseDto } from './dto/subscription-response.dto';
+import { SubscriptionEntity } from './entities/subscription.entity';
 
 @ApiTags('Subscriptions')
 @Controller('subscriptions')
@@ -23,35 +23,34 @@ export class SubscriptionsController {
   @ApiCreatedResponse({ type: SubscriptionResponseDto, description: 'Subscription created' })
   @ApiBadRequestResponse({ description: 'Bad request' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
-  create(@Body() createSubscriptionDto: CreateSubscriptionDto): Promise<Subscription> {
+  create(@Body() createSubscriptionDto: CreateSubscriptionDto): Promise<SubscriptionEntity> {
     return this.subscriptionsService.create(createSubscriptionDto);
   }
 
   @Get()
   @ApiOperation({ summary: 'Get all subscriptions' })
-  @ApiOkResponse({ type: [SubscriptionResponseDto], description: 'Paginated response of all subscriptions' })
+  @ApiOkResponse({ type: SubscriptionPaginatedResponseDto, description: 'Paginated response of all subscriptions' })
   @ApiNotFoundResponse({ description: 'Subscriptions not found' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
-  findAll(@Query() pagination: PaginationDTO): Promise<Pagination<Subscription>> {
+  findAll(@Query() pagination: PaginationDTO): Promise<Pagination<SubscriptionEntity>> {
     const { page, limit } = pagination;
-    return this.subscriptionsService.findAll({ page, limit, route: `${this.baseUrl}/subscriptions` });
+    return this.subscriptionsService.findAll(pagination, { page, limit, route: `${this.baseUrl}/subscriptions` });
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get one subscription by ID' })
-  @ApiOkResponse({ type: SubscriptionResponseDto, description: 'Subscription found' })
-  @ApiNotFoundResponse({ description: 'Subscription not found' })
+  @ApiOkResponse({ type: SubscriptionResponseDto, description: 'Subscription found or null' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
-  findOne(@Param('id', new ParseUUIDPipe()) id: string): Promise<Subscription> {
+  findOne(@Param('id', new ParseUUIDPipe()) id: string): Promise<SubscriptionEntity> {
     return this.subscriptionsService.findOne(id);
   }
 
-  @Delete(':id')
-  @HttpCode(204)
-  @ApiNoContentResponse({ description: 'Subscription canceled' })
-  @ApiNotFoundResponse({ description: 'Subscription not found' })
-  @ApiInternalServerErrorResponse({ description: 'Internal server error' })
-  remove(@Param('id', new ParseUUIDPipe()) id: string): Promise<void> {
-    return this.subscriptionsService.remove(id);
-  }
+  // @Delete(':id')
+  // @HttpCode(204)
+  // @ApiNoContentResponse({ description: 'Subscription canceled' })
+  // @ApiNotFoundResponse({ description: 'Subscription not found' })
+  // @ApiInternalServerErrorResponse({ description: 'Internal server error' })
+  // cancel(@Param('id', new ParseUUIDPipe()) id: string): Promise<void> {
+  //   return this.subscriptionsService.cancel(id);
+  // }
 }
