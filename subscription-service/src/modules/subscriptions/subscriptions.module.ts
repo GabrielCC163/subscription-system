@@ -4,10 +4,11 @@ import { SubscriptionsController } from './subscriptions.controller';
 import { HttpModule } from '@nestjs/axios';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SubscriptionEntity } from './entities/subscription.entity';
+import { KafkaService } from '@modules/messaging/kafka.service';
 
 @Module({
   imports: [HttpModule, TypeOrmModule.forFeature([SubscriptionEntity])],
   controllers: [SubscriptionsController],
-  providers: [SubscriptionsService],
+  providers: [SubscriptionsService, KafkaService],
 })
 export class SubscriptionsModule { }
