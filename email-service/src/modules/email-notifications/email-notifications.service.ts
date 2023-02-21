@@ -1,16 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { SendEmailNotificationDto } from './dto/send-email-notification.dto';
+import { SubscriptionDto } from './dto/subscription.dto';
+import { EmailNotificationResponseDto } from './interfaces/email-notification-response.dto';
 
 @Injectable()
 export class EmailNotificationsService {
-    async send(sendEmailNotificationDto: SendEmailNotificationDto) {
+    async send(subscription: SubscriptionDto): Promise<EmailNotificationResponseDto> {
         try {
-            const result = {
-                ...sendEmailNotificationDto,
-                success: true,
-            };
-            console.log(result);
-            return result;
+            const newNotification = {
+                to: subscription.email,
+                senderEmail: 'email-service@email.com',
+                subject: subscription.newsletterId,
+                content: ''
+            }
+
+            console.log({ date: new Date(), ...newNotification });
+            return newNotification;
         } catch (error) {
             console.log(error);
         }

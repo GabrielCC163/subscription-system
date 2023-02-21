@@ -1,14 +1,16 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import { SendEmailNotificationDto } from './dto/send-email-notification.dto';
+import { Controller } from '@nestjs/common';
+import { EventPattern, Payload } from '@nestjs/microservices';
+import { SubscriptionDto } from './dto/subscription.dto';
 import { EmailNotificationsService } from './email-notifications.service';
+import { EmailNotificationResponseDto } from './interfaces/email-notification-response.dto';
 
 
-@Controller('email-notifications')
+@Controller()
 export class EmailNotificationsController {
     constructor(private readonly emailService: EmailNotificationsService) { }
 
-    @Post('send')
-    async create(@Body() sendEmailNotificationDto: SendEmailNotificationDto): Promise<void> {
-        await this.emailService.send(sendEmailNotificationDto);
+    @EventPattern('subscription-service.new-subscription')
+    create(@Payload() subscription: SubscriptionDto): Promise<EmailNotificationResponseDto> {
+        return this.emailService.send(subscription);
     }
 }

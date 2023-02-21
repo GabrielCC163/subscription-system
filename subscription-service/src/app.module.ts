@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { getConfig } from '@config/app.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { config as TypeOrmConfig } from './ormconfig';
+import { MessagingModule } from '@modules/messaging/messaging.module';
 
 @Module({
   imports: [
@@ -13,7 +14,8 @@ import { config as TypeOrmConfig } from './ormconfig';
       isGlobal: true,
     }),
     TypeOrmModule.forRoot({ ...TypeOrmConfig, autoLoadEntities: true }),
-    SubscriptionsModule
+    SubscriptionsModule,
+    MessagingModule
   ],
   controllers: [],
   providers: [],

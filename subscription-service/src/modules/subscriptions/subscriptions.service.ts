@@ -6,12 +6,14 @@ import { handleError } from '@common/error-handlers';
 import { SubscriptionEntity } from './entities/subscription.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { KafkaService } from '@modules/messaging/kafka.service';
 
 @Injectable()
 export class SubscriptionsService {
   constructor(
     @InjectRepository(SubscriptionEntity)
     private subscriptionRepository: Repository<SubscriptionEntity>,
+    private kafka: KafkaService
   ) { }
 
   async create(createSubscriptionDto: CreateSubscriptionDto): Promise<SubscriptionEntity> {
@@ -27,7 +29,10 @@ export class SubscriptionsService {
       });
 
       if (subscription) throw new BadRequestException(`Subscription already exists for newsletter ${newsletterId}`);
-      return await this.subscriptionRepository.save(createSubscriptionDto);
+
+      const newSubscription = await this.subscriptionRepository.save(createSubscriptionDto);
+      this.kafka.emit('subscription-service.new-subscription', newSubscription);
+      return newSubscription;
     } catch (error) {
       const err = handleError(error);
       throw err;

@@ -17,7 +17,9 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
 
   setupSwagger(applicationName, app);
-  await app.listen(process.env.PORT || 3000);
+  await app.listen(process.env.PORT || 3000).then(() => {
+    console.log('[Public Service] HTTP server running!');
+  });;
 }
 
 bootstrap().catch((err) => {

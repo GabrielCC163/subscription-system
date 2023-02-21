@@ -1,6 +1,6 @@
 import { GenderEnum } from '../enum';
 
-export interface Subscription {
+export class SubscriptionDto {
     id: string;
     email: string;
     firstName?: string;
