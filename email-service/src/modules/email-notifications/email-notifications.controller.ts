@@ -8,7 +8,7 @@ export class EmailNotificationsController {
     constructor(private readonly emailService: EmailNotificationsService) { }
 
     @Post('send')
-    create(@Body() sendEmailNotificationDto: SendEmailNotificationDto) {
-        return this.emailService.send(sendEmailNotificationDto);
+    async create(@Body() sendEmailNotificationDto: SendEmailNotificationDto): Promise<void> {
+        await this.emailService.send(sendEmailNotificationDto);
     }
 }
