@@ -1,4 +1,4 @@
-import { NotFoundException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import axios from 'axios';
 
 export function handleError(error: unknown): Error {
@@ -7,6 +7,10 @@ export function handleError(error: unknown): Error {
 
     if (error.response?.data?.statusCode === 404) {
       return new NotFoundException(msg);
+    }
+
+    if (error.response?.data?.statusCode === 400) {
+      return new BadRequestException(msg);
     }
 
     return new Error(msg);

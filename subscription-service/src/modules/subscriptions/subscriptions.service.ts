@@ -58,13 +58,15 @@ export class SubscriptionsService {
     }
   }
 
-  // async cancel(id: string): Promise<void> {
+  async cancel(id: string): Promise<void> {
+    try {
+      const subscription = await this.subscriptionRepository.findOneBy({ id });
+      if (!subscription) throw new NotFoundException('Subscription not found');
 
-  //   try {
-
-  //   } catch (error) {
-  //     const err = handleError(error);
-  //     throw err;
-  //   }
-  // }
+      await this.subscriptionRepository.softDelete(id);
+    } catch (error) {
+      const err = handleError(error);
+      throw err;
+    }
+  }
 }

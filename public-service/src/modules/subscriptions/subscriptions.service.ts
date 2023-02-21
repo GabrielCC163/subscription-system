@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateSubscriptionDto } from './dto/create-subscription.dto';
 import { IPaginationOptions, paginate, Pagination } from 'nestjs-typeorm-paginate';
 import { PaginationDTO } from '@common/dto/pagination.dto';
@@ -57,6 +57,8 @@ export class SubscriptionsService {
 
     try {
       const { data } = await lastValueFrom(this.httpService.get(url, this.getHeaders()));
+      if (!data) throw new NotFoundException('Subscription not found');
+
       return data;
     } catch (error) {
       const err = handleError(error);
@@ -64,7 +66,7 @@ export class SubscriptionsService {
     }
   }
 
-  async remove(id: string): Promise<void> {
+  async cancel(id: string): Promise<void> {
     const url = `${this.subscriptionServiceHost}/subscriptions/${id}`;
 
     try {
