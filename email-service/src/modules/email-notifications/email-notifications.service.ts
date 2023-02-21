@@ -13,7 +13,7 @@ export class EmailNotificationsService {
                 content: ''
             }
 
-            console.log({ date: new Date(), ...newNotification });
+            console.log({ date: new Date().toString(), ...newNotification });
             return newNotification;
         } catch (error) {
             console.log(error);
