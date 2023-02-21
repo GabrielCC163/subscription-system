@@ -40,11 +40,11 @@ export class SubscriptionsService {
     }
   }
 
-  async findAll(options: IPaginationOptions): Promise<Pagination<Subscription>> {
+  async findAll(pagination: PaginationDTO): Promise<Pagination<Subscription>> {
     const url = `${this.subscriptionServiceHost}/subscriptions`;
 
     try {
-      const { data } = await lastValueFrom(this.httpService.get(url, { params: options, ...this.getHeaders() }));
+      const { data } = await lastValueFrom(this.httpService.get(url, { params: pagination, ...this.getHeaders() }));
       return data;
     } catch (error) {
       const err = handleError(error);

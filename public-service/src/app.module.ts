@@ -10,7 +10,8 @@ import { getConfig } from '@config/app.config';
       cache: true,
       isGlobal: true,
     }),
-    SubscriptionsModule],
+    SubscriptionsModule
+  ],
   controllers: [],
   providers: [],
 })

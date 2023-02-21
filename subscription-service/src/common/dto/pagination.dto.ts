@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-inferrable-types */
-import { IsEmail, IsNumber, IsOptional, Max, Min } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString, Max, Min } from 'class-validator';
 import { Transform } from 'class-transformer';
 
 export class PaginationDTO {
@@ -15,6 +14,10 @@ export class PaginationDTO {
   @Min(1)
   @Max(50)
   limit: number = 10;
+
+  @IsNotEmpty()
+  @IsString()
+  route: string;
 
   @IsOptional()
   @IsEmail()

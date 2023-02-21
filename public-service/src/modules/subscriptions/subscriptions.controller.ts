@@ -33,8 +33,8 @@ export class SubscriptionsController {
   @ApiNotFoundResponse({ description: 'Subscriptions not found' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
   findAll(@Query() pagination: PaginationDTO): Promise<Pagination<Subscription>> {
-    const { page, limit } = pagination;
-    return this.subscriptionsService.findAll({ page, limit, route: `${this.baseUrl}/subscriptions` });
+    pagination.route = `${this.baseUrl}/subscriptions`;
+    return this.subscriptionsService.findAll(pagination);
   }
 
   @Get(':id')

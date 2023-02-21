@@ -34,12 +34,15 @@ export class SubscriptionsService {
     }
   }
 
-  async findAll(pagination: PaginationDTO, options: IPaginationOptions): Promise<Pagination<SubscriptionEntity>> {
+  async findAll(pagination: PaginationDTO): Promise<Pagination<SubscriptionEntity>> {
+    const { page, limit, route, email } = pagination;
+    const options: IPaginationOptions = { page, limit, route };
+
     try {
       const searchOptions = { where: {}, order: { createdAt: 'DESC' } } as any;
 
-      if (pagination.email) {
-        searchOptions.where['email'] = pagination.email;
+      if (email) {
+        searchOptions.where['email'] = email;
       }
 
       return paginate<SubscriptionEntity>(this.subscriptionRepository, options, searchOptions);

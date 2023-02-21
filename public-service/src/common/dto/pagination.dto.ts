@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-inferrable-types */
-import { IsNumber, IsOptional, Max, Min } from 'class-validator';
-import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsEmail, IsNumber, IsOptional, Max, Min } from 'class-validator';
+import { ApiHideProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 
 export class PaginationDTO {
@@ -18,4 +17,11 @@ export class PaginationDTO {
   @Min(1)
   @Max(50)
   limit: number = 10;
+
+  @IsOptional()
+  @IsEmail()
+  email?: string;
+
+  @ApiHideProperty()
+  route: string;
 }
