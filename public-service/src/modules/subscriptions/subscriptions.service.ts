@@ -22,8 +22,7 @@ export class SubscriptionsService {
   private getHeaders() {
     return {
       headers: {
-        Authorization: 'Basic ' + Buffer.from(`${this.subscriptionServiceSecretKey}:`).toString('base64'),
-        'Content-Type': 'application/json',
+        apiKey: this.subscriptionServiceSecretKey
       },
     };
   }
