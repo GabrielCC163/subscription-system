@@ -23,7 +23,7 @@ export const getConfig = (): AppConfig => {
     app_env: ApplicationEnvEnum[env.APP_ENV] || ApplicationEnvEnum.LOCAL,
     base_url: env.BASE_URL,
     subscription_service: {
-      host: env.SUBSCRIPTION_SERVICE_HOST || 'localhost:3001',
+      host: env.SUBSCRIPTION_SERVICE_HOST,
       secret_key: env.SUBSCRIPTION_SERVICE_SECRET_KEY
     }
   };

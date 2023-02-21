@@ -9,6 +9,8 @@ services:
       - ./app/node_modules
     env_file:
       - ./public-service/.env
+    environment:
+      SUBSCRIPTION_SERVICE_HOST: http://subscription-service:3001
     ports:
       - "3000:3000"
     depends_on:
