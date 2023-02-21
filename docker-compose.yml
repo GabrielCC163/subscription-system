@@ -33,7 +33,7 @@ services:
       - ./subscription-service/.env
     environment:
       DB_HOST: db
-      KAFKA_BROKERS: kafka:9093
+      KAFKA_BROKERS: kafka:9092
     ports:
       - "3001:3001"
     depends_on:
@@ -52,7 +52,7 @@ services:
     env_file:
       - ./email-service/.env
     environment:
-      KAFKA_BROKERS: kafka:9093
+      KAFKA_BROKERS: kafka:9092
     ports:
       - "3002:3002"
     depends_on:
@@ -81,7 +81,7 @@ services:
       - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
       - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
       - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:9093
-      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://kafka:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://localhost:9093
       - KAFKA_INTER_BROKER_LISTENER_NAME=CLIENT
     depends_on:
       - zookeeper

@@ -15,6 +15,9 @@ export class KafkaService
       producer: {
         allowAutoTopicCreation: true,
       },
+      consumer: {
+        groupId: 'subscription-service-group'
+      }
     });
   }
 
