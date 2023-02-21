@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-const exampleDate = '2022-03-31T20:12:44.057Z';
+export const exampleDate = '2022-03-31T20:12:44.057Z';
 
 export class BaseResponseDto {
   @ApiProperty({ example: '5654860a-4834-42cc-bd7e-01aba4de80b' })

@@ -7,7 +7,7 @@ import { AppConfig } from '@config/app.config';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { PaginationDTO } from 'src/common/dto/pagination.dto';
 import { Subscription } from './interfaces';
-import { SubscriptionResponseDto } from './dto/subscription-response.dto';
+import { SubscriptionPaginatedResponseDto, SubscriptionResponseDto } from './dto/subscription-response.dto';
 
 @ApiTags('Subscriptions')
 @Controller('subscriptions')
@@ -29,7 +29,7 @@ export class SubscriptionsController {
 
   @Get()
   @ApiOperation({ summary: 'Get all subscriptions' })
-  @ApiOkResponse({ type: [SubscriptionResponseDto], description: 'Paginated response of all subscriptions' })
+  @ApiOkResponse({ type: SubscriptionPaginatedResponseDto, description: 'Paginated response of all subscriptions' })
   @ApiNotFoundResponse({ description: 'Subscriptions not found' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
   findAll(@Query() pagination: PaginationDTO): Promise<Pagination<Subscription>> {
