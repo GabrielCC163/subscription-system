@@ -31,7 +31,7 @@ export class SubscriptionsService {
       if (subscription) throw new BadRequestException(`Subscription already exists for newsletter ${newsletterId}`);
 
       const newSubscription = await this.subscriptionRepository.save(createSubscriptionDto);
-      this.kafka.emit('subscription-service.new-subscription', newSubscription);
+      this.kafka.emit('subscription-service.new-subscription', {...newSubscription});
       return newSubscription;
     } catch (error) {
       const err = handleError(error);

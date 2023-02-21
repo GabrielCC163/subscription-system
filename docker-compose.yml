@@ -1,5 +1,9 @@
 version: "3.8"
 
+networks:
+  app-net:
+    driver: bridge
+
 services:
   public-service:
     build: ./public-service
@@ -16,6 +20,8 @@ services:
     depends_on:
       - subscription-service
     restart: always
+    networks:
+      - app-net
 
   subscription-service:
     build: ./subscription-service
@@ -27,13 +33,15 @@ services:
       - ./subscription-service/.env
     environment:
       DB_HOST: db
-      KAFKA_BROKERS: kafka:29092
+      KAFKA_BROKERS: kafka:9093
     ports:
       - "3001:3001"
     depends_on:
       - db
       - email-service
     restart: always
+    networks:
+      - app-net
 
   email-service:
     build: ./email-service
@@ -44,34 +52,41 @@ services:
     env_file:
       - ./email-service/.env
     environment:
-      KAFKA_BROKERS: kafka:29092
+      KAFKA_BROKERS: kafka:9093
     ports:
       - "3002:3002"
     depends_on:
       - kafka
     restart: always
+    networks:
+      - app-net
 
   zookeeper:
-    image: confluentinc/cp-zookeeper:latest
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
+    image: 'docker.io/bitnami/zookeeper:3-debian-10'
     ports:
-      - 22181:2181
+      - 2181:2181
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    networks:
+      - app-net
 
   kafka:
-    image: confluentinc/cp-kafka:latest
+    image: 'docker.io/bitnami/kafka:2-debian-10'
+    ports:
+      - 9092:9092
+      - 9093:9093
+    environment:
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://kafka:9093
+      - KAFKA_INTER_BROKER_LISTENER_NAME=CLIENT
     depends_on:
       - zookeeper
-    ports:
-      - 29092:29092
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - app-net
 
   kafka_ui:
     image: provectuslabs/kafka-ui:latest
@@ -82,7 +97,9 @@ services:
     environment:
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
       KAFKA_CLUSTERS_0_NAME: local
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9093
+    networks:
+      - app-net
 
   db:
     image: postgres
@@ -95,6 +112,8 @@ services:
     volumes:
       - db-data:/data/postgres
     restart: unless-stopped
+    networks:
+      - app-net
 
 volumes:
   db-data:
