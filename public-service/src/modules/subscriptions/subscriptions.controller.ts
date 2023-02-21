@@ -51,7 +51,7 @@ export class SubscriptionsController {
   @ApiNoContentResponse({ description: 'Subscription canceled' })
   @ApiNotFoundResponse({ description: 'Subscription not found' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
-  cancel(@Param('id', new ParseUUIDPipe()) id: string): Promise<void> {
-    return this.subscriptionsService.cancel(id);
+  async cancel(@Param('id', new ParseUUIDPipe()) id: string): Promise<void> {
+    await this.subscriptionsService.cancel(id);
   }
 }

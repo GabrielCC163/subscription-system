@@ -26,7 +26,7 @@ export class SubscriptionsController {
 
   @Delete(':id')
   @HttpCode(204)
-  cancel(@Param('id', new ParseUUIDPipe()) id: string): Promise<void> {
-    return this.subscriptionsService.cancel(id);
+  async cancel(@Param('id', new ParseUUIDPipe()) id: string): Promise<void> {
+    await this.subscriptionsService.cancel(id);
   }
 }
