@@ -12,7 +12,6 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config = app.get<ConfigService<AppConfig, true>>(ConfigService);
   const kafkaBrokers = config.get<AppConfig['kafka_brokers']>('kafka_brokers');
-  console.log(kafkaBrokers)
 
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
