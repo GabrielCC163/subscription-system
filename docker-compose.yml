@@ -7,7 +7,7 @@ networks:
 services:
   public-service:
     build: ./public-service
-    command: npm run start:dev
+    command: npm run start
     volumes:
       - ./public-service:/app
       - ./app/node_modules
@@ -25,7 +25,7 @@ services:
 
   subscription-service:
     build: ./subscription-service
-    command: npm run start:dev
+    command: npm run start
     volumes:
       - ./subscription-service:/app
       - ./app/node_modules
@@ -45,7 +45,7 @@ services:
 
   email-service:
     build: ./email-service
-    command: npm run start:dev
+    command: npm run start
     volumes:
       - ./email-service:/app
       - ./app/node_modules
