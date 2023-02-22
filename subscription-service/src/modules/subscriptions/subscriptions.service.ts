@@ -7,14 +7,22 @@ import { SubscriptionEntity } from './entities/subscription.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { KafkaService } from '@modules/messaging/kafka.service';
+import * as jwt from 'jsonwebtoken';
+import { ConfigService } from '@nestjs/config';
+import { AppConfig } from '@config/app.config';
 
 @Injectable()
 export class SubscriptionsService {
+  private apiSharedSecret: string;
+
   constructor(
     @InjectRepository(SubscriptionEntity)
     private subscriptionRepository: Repository<SubscriptionEntity>,
-    private kafka: KafkaService
-  ) { }
+    private kafka: KafkaService,
+    private readonly configService: ConfigService<AppConfig>
+  ) {
+    this.apiSharedSecret = this.configService.get('api_shared_secret');
+  }
 
   async create(createSubscriptionDto: CreateSubscriptionDto): Promise<SubscriptionEntity> {
     const { email, newsletterId, consent } = createSubscriptionDto;
@@ -31,7 +39,9 @@ export class SubscriptionsService {
       if (subscription) throw new BadRequestException(`Subscription already exists for newsletter ${newsletterId}`);
 
       const newSubscription = await this.subscriptionRepository.save(createSubscriptionDto);
-      this.kafka.emit('subscription-service.new-subscription', { ...newSubscription });
+
+      const token = jwt.sign({ ...newSubscription }, this.apiSharedSecret);
+      this.kafka.emit('subscription-service.new-subscription', { headers: { 'x-auth-token': token }, value: { ...newSubscription } });
       return newSubscription;
     } catch (error) {
       const err = handleError(error);
