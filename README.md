@@ -7,7 +7,9 @@
 * Node (v16.13.2)
 * NPM (v8.1.2)
 
-### **Start all services**
+<hr>
+
+### Start all services
     ```
     cd subscription-system
 
@@ -16,6 +18,18 @@
 
 ### API Documentation
 * Access: http://localhost:3000/docs
+
+<hr>
+
+### Tests
+Make sure that the db, kafka and email-service are up (you can start them with **docker-compose up <service>** individually), then:
+```
+cd subscription-service
+
+npm run jest
+```
+
+<hr>
 
 ### ***Postgres Database***
 * Start: 
@@ -85,11 +99,13 @@
     ``` 
 * Access: http://localhost:3000/docs
 
+<hr>
+
 ### Technologies
 * NestJS
     * Framework for building efficient, scalable Node.js server-side applications.
     * Nest provides an out-of-the-box application architecture which allows developers and teams to create highly testable, scalable, loosely coupled, and easily maintainable applications. The architecture is heavily inspired by Angular.
-    * Along with NestJS, this project used the **TypeScript** programming language
+    * Along with NestJS, this project used the **TypeScript** programming language.
 
 * PostgreSQL
     * One of the most used and highly stable relational databases nowadays.

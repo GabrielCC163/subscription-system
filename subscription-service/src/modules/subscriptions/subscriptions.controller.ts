@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Param, Delete, ParseUUIDPipe, Query, HttpC
 import { SubscriptionsService } from './subscriptions.service';
 import { CreateSubscriptionDto } from './dto/create-subscription.dto';
 import { Pagination } from 'nestjs-typeorm-paginate';
-import { PaginationDTO } from 'src/common/dto/pagination.dto';
+import { PaginationDTO } from '@common/dto/pagination.dto';
 import { SubscriptionEntity } from './entities/subscription.entity';
 
 @Controller('subscriptions')
