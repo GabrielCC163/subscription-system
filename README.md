@@ -10,11 +10,11 @@
 <hr>
 
 ### Start all services
-    ```
-    cd subscription-system
+```
+cd subscription-system
 
-    docker-compose up
-    ```
+docker-compose up
+```
 
 ### API Documentation
 * Access: http://localhost:3000/docs
