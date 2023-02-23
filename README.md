@@ -26,7 +26,7 @@ Make sure that the db, kafka and email-service are up (you can start them with *
 ```
 cd subscription-service
 
-npm run jest
+npm run test
 ```
 
 <hr>

@@ -15,9 +15,9 @@ export class PaginationDTO {
   @Max(50)
   limit: number = 10;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  route: string;
+  route: string = 'http://localhost:3001/subscriptions';
 
   @IsOptional()
   @IsEmail()
